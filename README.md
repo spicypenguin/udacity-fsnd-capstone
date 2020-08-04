@@ -30,6 +30,15 @@ The application will be available at `localhost:9000`
 
 This application is deployed to Heroku at: [https://fatpenguin-casting.herokuapp.com/](https://fatpenguin-casting.herokuapp.com/)
 
+## Deploying the hosted application
+
+The application is setup to automatically deploy from Github to Heroku on successful merge to master.
+
+If any changes are made to the database schema, the following command needs to be run manually after the master deploy has completed:
+
+`heroku run sh -c 'cd ./src/ && flask db upgrade' --app fatpenguin-casting`
+
+This will perform a flask DB migration on the heroku server, and restart the application.
 
 ## API specification
 
@@ -45,19 +54,114 @@ There are 3 different roles for accessing the Casting Agency app.
 
 In order to request any of the APIs noted below, you must authenticate your requests using a `Bearer` token in the headers of the request.
 
+For testing purposes, you can use the following access tokens (for the next week):
+
+* `Casting assistant`: ``
+* `Casting director`: ``
+* `Executive producer`: ``
+
 ### Actors APIs
 
 #### GET
 `GET /actors`
 
+**Response (`200 OK`)**
+```json
+{
+    "success": true,
+    "actors": [
+        {
+            "id": 1,
+            "name": "Actor name",
+            "date_of_birth": "YYYY-MM-DD",
+            "age": 35,                      // Age in years, calculated at request time
+            "gender": "male",
+            "movies": [
+                {
+                    "title": "Movie title",
+                    "release_date": "YYYY-MM-DD"
+                }
+            ]
+        }
+    ]
+}
+```
+
 #### POST
 `POST /actors`
+
+**Request body**
+```json
+{
+    "name": "Actor name",          // required
+    "date_of_birth": "YYYY-MM-DD", // optional, date format enforced
+    "gender": "male"               // optional, no validation performed
+}
+```
+
+**Response (`200 OK`)**
+```json
+{
+    "success": true,
+    "actor": {
+        "id": 1,
+        "name": "Actor name",
+        "date_of_birth": "YYYY-MM-DD",
+        "age": 35, // Age in years, calculated at request time
+        "gender": "male",
+        "movies": [
+            {
+                "title": "Movie title",
+                "release_date": "YYYY-MM-DD"
+            }
+        ]
+    } 
+}
+```
 
 #### PATCH
 `PATCH /actors/<int:actor_id>`
 
+**Request body**
+At least one of the properties outlined in the payload below must be provided.
+```json
+{
+    "name": "Actor name",          // optional
+    "date_of_birth": "YYYY-MM-DD", // optional, date format enforced
+    "gender": "male"               // optional, no validation performed
+}
+```
+
+**Response (`200 OK`)**
+```json
+{
+    "success": true,
+    "actor": {
+        "id": 1,
+        "name": "Actor name",
+        "date_of_birth": "YYYY-MM-DD",
+        "age": 35, // Age in years, calculated at request time
+        "gender": "male",
+        "movies": [
+            {
+                "title": "Movie title",
+                "release_date": "YYYY-MM-DD"
+            }
+        ]
+    }   
+}
+```
+
 #### DELETE
 `DELETE /actors/<int:actor_id>`
+
+**Response (`200 OK`)**
+```json
+{
+    "success": true,
+    "actor_id": 1
+}
+```
 
 
 ### Movies APIs
@@ -65,23 +169,145 @@ In order to request any of the APIs noted below, you must authenticate your requ
 #### GET
 `GET /movies`
 
+**Response (`200 OK`)**
+```json
+{
+    "success": true,
+    "movies": [
+        {
+            "id": 1,
+            "title": "Movie title",
+            "release_date": "YYYY-MM-DD",
+            "actors": [
+                {
+                    "name": "Actor name",
+                    "date_of_birth": "YYYY-MM-DD",
+                    "age": 35,
+                    "gender": "male"
+                }
+            ]
+        }
+    ]
+}
+```
+
 #### POST
 `POST /movies`
+
+**Request body**
+```json
+{
+    "title": "Movie name",         // required
+    "release_date": "YYYY-MM-DD"   // optional, date format enforced
+}
+```
+
+**Response (`200 OK`)**
+```json
+{
+    "success": true,
+    "movie": {
+        "id": 1,
+        "title": "Movie title",
+        "release_date": "YYYY-MM-DD",
+        "actors": [
+            {
+                "name": "Actor name",
+                "date_of_birth": "YYYY-MM-DD",
+                "age": 35,
+                "gender": "male"
+            }
+        ]
+    }
+}
+```
 
 #### PATCH
 `PATCH /movies/<int:movie_id>`
 
+**Request body**
+At least one of the properties outlined in the payload below must be provided.
+```json
+{
+    "title": "Movie name",         // optional
+    "release_date": "YYYY-MM-DD"   // optional, date format enforced
+}
+```
+
+**Response (`200 OK`)**
+```json
+{
+    "success": true,
+    "movie": {
+        "id": 1,
+        "title": "Movie title",
+        "release_date": "YYYY-MM-DD",
+        "actors": [
+            {
+                "name": "Actor name",
+                "date_of_birth": "YYYY-MM-DD",
+                "age": 35,
+                "gender": "male"
+            }
+        ]
+    }
+}
+```
+
 #### DELETE
 `DELETE /movies/<int:movie_id>`
 
+**Response (`200 OK`)**
+```json
+{
+    "success": true,
+    "movie_id": 1
+}
+```
 
 ### Roles APIs
 
 ### POST
 `POST /movies/<int:movie_id>/actors`
 
+**Request body**
+```json
+{
+    "actor_id": 1  // required
+}
+```
+
+**Response (`200 OK`)**
+```json
+{
+    "success": true,
+    "movie": {
+        "id": 1,
+        "title": "Movie title",
+        "release_date": "YYYY-MM-DD",
+        "actors": [
+            {
+                "name": "Actor name",
+                "date_of_birth": "YYYY-MM-DD",
+                "age": 35,
+                "gender": "male"
+            }
+        ]
+    }
+}
+```
+
 ### DELETE
 `DELETE /movies/<int:movie_id>/actors/<int:actor_id>`
+
+**Response (`200 OK`)**
+```json
+{
+    "success": true,
+    "movie_id": 1,
+    "actor_id": 1
+}
+```
 
 ### Error cases
 
@@ -111,6 +337,18 @@ Expected to be seen if there was a problem validating the authentication headers
 }
 ```
 
+### 403 FORBIDDEN
+
+Expected to be seen if the validated token provided does not have access to the requested resources. 
+
+```json
+{
+    "success": false,
+    "status": 403,
+    "message": "custom error message based on what caused the forbidden error to occur"
+}
+```
+
 ### 404 RESOURCE NOT FOUND
 
 Expected to be seen if a request is processed against an actor_id or movie_id that does not exist.
@@ -134,8 +372,6 @@ Expected to be seen if an actor is attempted to be added to a movie, but they ar
     "message": "custom error message based on what caused the conflict to occur"
 }
 ```
-
-App will be running at `localhost:9000`
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
