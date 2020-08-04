@@ -14,11 +14,11 @@ from auth.auth import requires_auth
 load_dotenv()
 
 
-def create_app(test_config=None):
+def create_app(test_db=None):
     # create and configure the app
     app = Flask(__name__)
     CORS(app)
-    setup_db(app)
+    setup_db(app, test_db)
     migrate = Migrate(app, db)
 
     return app
