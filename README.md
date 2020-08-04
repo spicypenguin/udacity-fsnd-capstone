@@ -4,7 +4,7 @@ Udacity's Got Talent is an app to allow Udacity to manage the allocation of our 
 
 We built this app as previously the matching of actors to movies was performed manually in a google sheets spreadsheet, which made maintenance difficult, and permissions were not able to be appropriately enforced on the system.
 
-## Installation for local development
+## Setup for local development
 
 This project depends on the following system requirements:
 
@@ -12,15 +12,17 @@ This project depends on the following system requirements:
 * `pyenv` - used to manage python virtual environments
 * `postgres` - must have a local version of postgres setup
 
-Before you can run the setup script, you must also:
+Before you can run the setup script, you must also set the following environment variables:
 
-* Create a database named `castingagency`
-* Create a user named `castingagency`
-* Create a `.env` file in the `src/` folder that contains an appropriate connection string to your postgres installation
+* `DATABASE_USER` - user that will be used to access the database
+* `DATABASE_PWD` - password for the user accessing the database
+* `DATABASE_HOST` - host where the database is running (default: localhost)
+* `DATABASE_PORT` - port where the database is exposed (default: 5432))
+* `DATABASE_NAME` - name of the database that will be used for the app
 
 If you have the pre-requisites installed, you can get started by running `./setup.sh`
 
-Once this is complete, you can run the app by executing: `python app.py`
+Once this is complete, you can run the app by executing: `cd src && python app.py`
 
 The application will be available at `localhost:9000`
 
@@ -36,7 +38,12 @@ See [how to setup authentication](#how-to-setup-authentication) for details on t
 
 ### Authentication
 
-TBC
+There are 3 different roles for accessing the Casting Agency app.
+1. Casting assistant - Can view actors and movies
+1. Casting director - Casting assistant, plus adding/deleting actors, and modifying actors/movies
+1. Executive producer - Casting director, plus adding/deleting movies
+
+In order to request any of the APIs noted below, you must authenticate your requests using a `Bearer` token in the headers of the request.
 
 ### Actors APIs
 
@@ -126,13 +133,6 @@ Expected to be seen if an actor is attempted to be added to a movie, but they ar
     "status": 409,
     "message": "custom error message based on what caused the conflict to occur"
 }
-```
-
-## Local development
-
-```bash
-cd src\
-python app.py
 ```
 
 App will be running at `localhost:9000`

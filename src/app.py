@@ -1,11 +1,15 @@
+from dotenv import load_dotenv
 from os import getenv
+
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_migrate import Migrate
+
 from models import db, setup_db, Actor, Movie, Role
 from helpers.dates import convert_date_to_dateobj
-from dotenv import load_dotenv
+from auth.auth import requires_auth
+
 
 load_dotenv()
 
@@ -29,6 +33,7 @@ APP = create_app()
 ########
 
 @APP.route('/actors')
+@requires_auth('read:actors')
 def get_actors():
     """Return a list of all actors"""
 
@@ -39,6 +44,7 @@ def get_actors():
 
 
 @APP.route('/actors', methods=['POST'])
+@requires_auth('create:actors')
 def create_actor():
     """Add a new actor to the database
 
@@ -74,6 +80,7 @@ def create_actor():
 
 
 @APP.route('/actors/<int:actor_id>', methods=['PATCH'])
+@requires_auth('update:actors')
 def update_actor(actor_id):
     """Updates an existing actor's information in the database
 
@@ -116,6 +123,7 @@ def update_actor(actor_id):
 
 
 @APP.route('/actors/<int:actor_id>', methods=['DELETE'])
+@requires_auth('delete:actors')
 def delete_actor(actor_id):
     """Deletes an existing actor from the database
 
@@ -141,6 +149,7 @@ def delete_actor(actor_id):
 ########
 
 @APP.route('/movies')
+@requires_auth('read:movies')
 def get_movies():
     """Return a list of all movies"""
 
@@ -151,8 +160,9 @@ def get_movies():
 
 
 @APP.route('/movies', methods=['POST'])
+@requires_auth('create:movies')
 def create_movie():
-     """Add a new movie to the database
+    """Add a new movie to the database
 
     Payload parameters:
     title -- the name of the movie (required)
@@ -181,6 +191,7 @@ def create_movie():
 
 
 @APP.route('/movies/<int:movie_id>', methods=['PATCH'])
+@requires_auth('update:movies')
 def update_movie(movie_id):
     """Updates an existing movie's information in the database
 
@@ -220,6 +231,7 @@ def update_movie(movie_id):
 
 
 @APP.route('/movies/<int:movie_id>', methods=['DELETE'])
+@requires_auth('delete:movies')
 def delete_movie(movie_id):
     """Deletes an existing movie from the database
 
@@ -240,9 +252,10 @@ def delete_movie(movie_id):
 
 
 @APP.route('/movies/<int:movie_id>/actors', methods=['POST'])
+@requires_auth('create:role')
 def add_actor_to_movie(movie_id):
     """Add an actor to a movie in the database
-    
+
     Payload parameters:
     actor_id -- the id of the actor being added to the movie (required)
 
@@ -281,12 +294,13 @@ def add_actor_to_movie(movie_id):
 
 
 @APP.route('/movies/<int:movie_id>/actors/<int:actor_id>', methods=['DELETE'])
+@requires_auth('delete:role')
 def remove_actor_from_movie(movie_id, actor_id):
     """Remove an actor from a movie in the database
 
     Returns an object, with the movie_id and actor_id that was deleted if successful.
     """
-    
+
     movie = Movie.query.get(movie_id)
     if not movie:
         abort(
