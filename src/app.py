@@ -32,6 +32,7 @@ APP = create_app()
 # /actors
 ########
 
+
 @APP.route('/actors')
 @requires_auth('read:actors')
 def get_actors():
@@ -312,11 +313,11 @@ def remove_actor_from_movie(movie_id, actor_id):
             404, description=f'Unable to find the specified actor_id: {actor_id}')
 
     role = Role.query.filter(
-        Role.movie_id == movie_id and Role.actor_id == actor_id).one_or_none()
+        Role.movie_id == movie_id, Role.actor_id == actor_id).one_or_none()
 
     if not role:
         abort(
-            409, description=f'`actor_id`: {actor_id} is not currently listed as having a role in `movie_id`: {movie_id}')
+            404, description=f'`actor_id`: {actor_id} is not currently listed as having a role in `movie_id`: {movie_id}')
 
     role.delete()
 

@@ -23,7 +23,7 @@ def setup_db(app, db_name=None):
         if not db_name:
             db_name = getenv('DATABASE_USER')
 
-        app.config["SQLALCHEMY_DATABASE_URI"] = f"postgres://{db_user}:{db_pwd}@{db_host}:{db_port}/{db_name}"
+        app.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://{db_user}:{db_pwd}@{db_host}:{db_port}/{db_name}"
     db.app = app
     db.init_app(app)
 

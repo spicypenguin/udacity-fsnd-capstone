@@ -43,7 +43,6 @@ def check_permissions(permission, payload):
     if 'permissions' not in payload:
         abort(400, description='Permissions expected in payload.')
 
-    print(payload['permissions'])
     if permission not in payload['permissions']:
         abort(403, description='Permission is not included in list of permissions.')
 
