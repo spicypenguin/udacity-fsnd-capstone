@@ -349,6 +349,15 @@ def not_authorized(error):
     }), 401
 
 
+@APP.errorhandler(403)
+def access_forbidden(error):
+    return jsonify({
+        'success': False,
+        'status': 403,
+        'message': error.description,
+    }), 403
+
+
 @APP.errorhandler(404)
 def resource_not_found(error):
     return jsonify({
