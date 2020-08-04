@@ -1,6 +1,6 @@
-# Udacity's Got Talent - Casting Agency App 
+# Fatpenguin Casting - Talent Agency App 
 
-Udacity's Got Talent is an app to allow Udacity to manage the allocation of our pool of talent (Actors) into upcoming Movie titles, providing visbilility into which actors are working on which projects. 
+Fatpenguin Casting is an app to allow the Fatpenguin Talent Agency to manage the allocation of our pool of talent (Actors) into upcoming Movie titles, providing visbilility into which actors are working on which projects. 
 
 We built this app as previously the matching of actors to movies was performed manually in a google sheets spreadsheet, which made maintenance difficult, and permissions were not able to be appropriately enforced on the system.
 
