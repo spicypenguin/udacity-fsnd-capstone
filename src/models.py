@@ -13,14 +13,17 @@ db = SQLAlchemy()
 def setup_db(app, db_name=None):
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    db_user = getenv('DATABASE_USER')
-    db_pwd = getenv('DATABASE_PWD')
-    db_host = getenv('DATABASE_HOST')
-    db_port = getenv('DATABASE_PORT')
-    if not db_name:
-        db_name = getenv('DATABASE_USER')
+    if getenv('DATABASE_URL'):
+        app.config["SQLALCHEMY_DATABASE_URI"] = getenv('DATABASE_URL')
+    else:
+        db_user = getenv('DATABASE_USER')
+        db_pwd = getenv('DATABASE_PWD')
+        db_host = getenv('DATABASE_HOST')
+        db_port = getenv('DATABASE_PORT')
+        if not db_name:
+            db_name = getenv('DATABASE_USER')
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = f"postgres://{db_user}:{db_pwd}@{db_host}:{db_port}/{db_name}"
+        app.config["SQLALCHEMY_DATABASE_URI"] = f"postgres://{db_user}:{db_pwd}@{db_host}:{db_port}/{db_name}"
     db.app = app
     db.init_app(app)
 
