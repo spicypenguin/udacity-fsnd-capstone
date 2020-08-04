@@ -2,15 +2,27 @@
 
 Udacity's Got Talent is an app to allow Udacity to manage the allocation of our pool of talent (Actors) into upcoming Movie titles, providing visbilility into which actors are working on which projects. 
 
-## Installation
+We built this app as previously the matching of actors to movies was performed manually in a google sheets spreadsheet, which made maintenance difficult, and permissions were not able to be appropriately enforced on the system.
 
-If you have the pre-requisites installed, you can get started by running: 
+## Installation for local development
 
-```bash
-./setup.sh
-```
+This project depends on the following system requirements:
 
-This requires `pyenv` to be installed to setup a virtualenvironment for your application.
+* `python3.8.1`
+* `pyenv` - used to manage python virtual environments
+* `postgres` - must have a local version of postgres setup
+
+Before you can run the setup script, you must also:
+
+* Create a database named `castingagency`
+* Create a user named `castingagency`
+* Create a `.env` file in the `src/` folder that contains an appropriate connection string to your postgres installation
+
+If you have the pre-requisites installed, you can get started by running `./setup.sh`
+
+Once this is complete, you can run the app by executing: `python app.py`
+
+The application will be available at `localhost:9000`
 
 ## Hosted application
 
