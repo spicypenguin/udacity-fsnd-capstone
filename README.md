@@ -54,11 +54,15 @@ There are 3 different roles for accessing the Casting Agency app.
 
 In order to request any of the APIs noted below, you must authenticate your requests using a `Bearer` token in the headers of the request.
 
-For testing purposes, you can use the following access tokens (for the next week):
+For testing purposes, you can login with the following username and pwd combinations:
 
-* `Casting assistant`: ``
-* `Casting director`: ``
-* `Executive producer`: ``
+* `Casting assistant`: `joff@fatpengu.in;abcdef12345!`
+* `Casting director`: `jaff@fatpengu.in;abcdef12345!`
+* `Executive producer`: `juff@fatpengu.in;abcdef12345!`
+
+You can login with the following URL, and grab the required access token from the authenticated URL:
+
+`https://fatpenguin-casting.us.auth0.com/authorize?response_type=token&client_id=KSbxknf2Lju1At5LcVsFvN26Jz2N1F2P&audience=casting-agency&redirect_uri=http://localhost:9000/login`
 
 ### Actors APIs
 
