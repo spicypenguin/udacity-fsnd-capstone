@@ -28,7 +28,7 @@ The application will be available at `localhost:9000`
 
 ## Hosted application
 
-This application is deployed to Heroku at: https://<appnamehere>
+This application is deployed to Heroku at: [https://fatpenguin-casting.herokuapp.com/](https://fatpenguin-casting.herokuapp.com/)
 
 
 ## API specification
